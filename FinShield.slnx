@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="FinShield.API/FinShield.API.csproj" />
+  <Project Path="FinShield.Core/FinShield.Core.csproj" />
+  <Project Path="FinShield.Infrastructure/FinShield.Infrastructure.csproj" />
+</Solution>
