@@ -6,10 +6,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { AuthService } from '../../../core/services/auth.service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
-  selector: 'app-register',
+  selector: 'app-login',
   standalone: true,
   imports: [
     CommonModule, ReactiveFormsModule, RouterLink,
@@ -21,8 +21,8 @@ import { AuthService } from '../../../core/services/auth.service';
 
         <div class="auth-logo">
           <mat-icon>security</mat-icon>
-          <h1>Create Account</h1>
-          <p>Join FinShield</p>
+          <h1>FinShield</h1>
+          <p>Financial Fraud & Spending Intelligence</p>
         </div>
 
         @if (error()) {
@@ -30,35 +30,27 @@ import { AuthService } from '../../../core/services/auth.service';
         }
 
         <form [formGroup]="form" (ngSubmit)="submit()">
-          <div class="name-row">
-            <mat-form-field appearance="outline">
-              <mat-label>First Name</mat-label>
-              <input matInput formControlName="firstName" />
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>Last Name</mat-label>
-              <input matInput formControlName="lastName" />
-            </mat-form-field>
-          </div>
-
           <mat-form-field appearance="outline" class="w-full">
             <mat-label>Email</mat-label>
             <input matInput type="email" formControlName="email" />
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="w-full">
-            <mat-label>Password (min 8 characters)</mat-label>
-            <input matInput type="password" formControlName="password" />
+            <mat-label>Password</mat-label>
+            <input matInput [type]="show ? 'text' : 'password'" formControlName="password" />
+            <button mat-icon-button matSuffix type="button" (click)="show = !show">
+              <mat-icon>{{ show ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
           </mat-form-field>
 
           <button mat-raised-button color="primary" class="w-full submit-btn"
             type="submit" [disabled]="form.invalid || loading()">
-            {{ loading() ? 'Creating account...' : 'Create Account' }}
+            {{ loading() ? 'Signing in...' : 'Sign In' }}
           </button>
         </form>
 
         <p class="auth-link">
-          Already have an account? <a routerLink="/auth/login">Sign in</a>
+          New to FinShield? <a routerLink="/auth/register">Create account</a>
         </p>
 
       </mat-card>
@@ -75,7 +67,7 @@ import { AuthService } from '../../../core/services/auth.service';
 
     .auth-card {
       width: 100%;
-      max-width: 440px;
+      max-width: 420px;
       padding: 32px;
       border-radius: 16px !important;
     }
@@ -95,15 +87,6 @@ import { AuthService } from '../../../core/services/auth.service';
     .auth-logo h1 { margin: 8px 0 4px; font-size: 28px; font-weight: 700; }
     .auth-logo p { color: #888; margin: 0; font-size: 14px; }
 
-    .name-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 0;
-    }
-
-    .name-row mat-form-field { width: 100%; }
-
     .w-full { width: 100%; margin-bottom: 8px; }
 
     .submit-btn { width: 100%; height: 48px; font-size: 16px; margin-top: 8px; }
@@ -120,10 +103,11 @@ import { AuthService } from '../../../core/services/auth.service';
     .auth-link { text-align: center; margin: 16px 0 0; font-size: 14px; color: #666; }
   `]
 })
-export class RegisterComponent {
+export class LoginComponent {
   form;
   loading = signal(false);
   error = signal('');
+  show = false;
 
   constructor(
     private auth: AuthService,
@@ -131,10 +115,8 @@ export class RegisterComponent {
     private router: Router
   ) {
     this.form = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]]
+      password: ['', Validators.required]
     });
   }
 
@@ -143,11 +125,11 @@ export class RegisterComponent {
     this.loading.set(true);
     this.error.set('');
 
-    const { email, password, firstName, lastName } = this.form.value;
-    this.auth.register(email!, password!, firstName!, lastName!).subscribe({
+    const { email, password } = this.form.value;
+    this.auth.login(email!, password!).subscribe({
       next: () => this.router.navigate(['/dashboard']),
-      error: (e) => {
-        this.error.set(e.error || 'Registration failed.');
+      error: () => {
+        this.error.set('Invalid email or password.');
         this.loading.set(false);
       }
     });
