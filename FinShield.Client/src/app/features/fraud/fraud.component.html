@@ -1,0 +1,79 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1>Fraud Alerts</h1>
+      <p class="subtitle">Suspicious transactions flagged by the anomaly detection engine</p>
+    </div>
+  </div>
+
+  <!-- Filter buttons -->
+  <div class="filter-row">
+    @for (f of filters; track f) {
+      <button mat-stroked-button
+        [class.active-filter]="activeFilter() === f"
+        (click)="activeFilter.set(f)">
+        {{ f }}
+      </button>
+    }
+  </div>
+
+  @if (filtered().length === 0) {
+    <mat-card class="empty-card">
+      <mat-icon class="empty-icon">verified_user</mat-icon>
+      <h2>No alerts</h2>
+      <p>{{ activeFilter() === 'Open'
+        ? 'No open fraud alerts. Your account looks clean.'
+        : 'No alerts in this category.' }}</p>
+    </mat-card>
+  }
+
+  @for (alert of filtered(); track alert.id) {
+    <mat-card class="alert-card" [class.open]="alert.status === 'Open'">
+
+      <div class="alert-top">
+        <div class="alert-left">
+          <div class="risk-badge" [class]="getRiskClass(alert.riskScore)">
+            {{ alert.riskScore | number:'1.0-0' }} RISK
+          </div>
+          <div>
+            <div class="alert-type">{{ alert.alertType }}</div>
+            <div class="alert-desc">{{ alert.description }}</div>
+          </div>
+        </div>
+
+        <div class="alert-right">
+          <span class="status-chip" [class]="alert.status.toLowerCase()">
+            {{ alert.status }}
+          </span>
+          @if (alert.status === 'Open') {
+            <button mat-stroked-button [matMenuTriggerFor]="menu" color="primary">
+              Resolve <mat-icon>arrow_drop_down</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="resolve(alert, 'Reviewed')">
+                <mat-icon>check_circle</mat-icon> Mark as Reviewed
+              </button>
+              <button mat-menu-item (click)="resolve(alert, 'Dismissed')">
+                <mat-icon>cancel</mat-icon> Dismiss
+              </button>
+            </mat-menu>
+          }
+        </div>
+      </div>
+
+      <div class="transaction-info">
+        <mat-icon>receipt</mat-icon>
+        <span>{{ alert.transaction.category }}</span>
+        <span class="sep">·</span>
+        <strong>R{{ alert.transaction.amount | number:'1.0-0' }}</strong>
+        <span class="sep">·</span>
+        <span>{{ alert.transaction.merchantName || alert.transaction.description || '—' }}</span>
+        <span class="sep">·</span>
+        <span class="date">{{ alert.transaction.date | date:'dd MMM yyyy' }}</span>
+      </div>
+
+      <div class="alert-meta">Detected {{ alert.createdAt | date:'dd MMM yyyy, HH:mm' }}</div>
+
+    </mat-card>
+  }
+</div>
