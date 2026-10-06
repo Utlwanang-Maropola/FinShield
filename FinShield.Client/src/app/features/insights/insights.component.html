@@ -1,0 +1,47 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1>AI Financial Insights</h1>
+      <p class="subtitle">Personalised analysis of your spending patterns</p>
+    </div>
+    <button mat-raised-button color="primary" (click)="generate()" [disabled]="loading()">
+      <mat-icon>auto_awesome</mat-icon>
+      {{ loading() ? 'Generating...' : 'Regenerate Insights' }}
+    </button>
+  </div>
+
+  @if (insights().length === 0 && !loading()) {
+    <mat-card class="empty-card">
+      <mat-icon class="empty-icon">auto_awesome</mat-icon>
+      <h2>No insights yet</h2>
+      <p>Click "Regenerate Insights" to analyse your spending for this month.</p>
+    </mat-card>
+  }
+
+  <div class="insights-grid">
+    @for (insight of insights(); track insight.id) {
+      <mat-card class="insight-card" [class]="'sev-' + insight.severity.toLowerCase()">
+
+        <div class="insight-header">
+          <mat-icon class="insight-icon">{{ getIcon(insight.type) }}</mat-icon>
+          <div class="insight-title-block">
+            <div class="insight-title">{{ insight.title }}</div>
+            @if (insight.changePercent !== null && insight.changePercent !== undefined) {
+              <div class="change-badge" [class]="insight.changePercent > 0 ? 'up' : 'down'">
+                <mat-icon>{{ insight.changePercent > 0 ? 'arrow_upward' : 'arrow_downward' }}</mat-icon>
+                {{ insight.changePercent | number:'1.0-0' }}%
+              </div>
+            }
+          </div>
+          <span class="sev-label" [class]="'sev-' + insight.severity.toLowerCase()">
+            {{ insight.severity }}
+          </span>
+        </div>
+
+        <p class="insight-message">{{ insight.message }}</p>
+        <div class="insight-meta">{{ insight.generatedAt | date:'dd MMM yyyy, HH:mm' }}</div>
+
+      </mat-card>
+    }
+  </div>
+</div>

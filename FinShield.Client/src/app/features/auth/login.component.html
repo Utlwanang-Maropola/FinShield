@@ -1,0 +1,39 @@
+<div class="auth-page">
+  <mat-card class="auth-card">
+
+    <div class="auth-logo">
+      <mat-icon>security</mat-icon>
+      <h1>FinShield</h1>
+      <p>Financial Fraud & Spending Intelligence</p>
+    </div>
+
+    @if (error()) {
+      <div class="error-box">{{ error() }}</div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Password</mat-label>
+        <input matInput [type]="show ? 'text' : 'password'" formControlName="password" />
+        <button mat-icon-button matSuffix type="button" (click)="show = !show">
+          <mat-icon>{{ show ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" class="w-full submit-btn"
+        type="submit" [disabled]="form.invalid || loading()">
+        {{ loading() ? 'Signing in...' : 'Sign In' }}
+      </button>
+    </form>
+
+    <p class="auth-link">
+      New to FinShield? <a routerLink="/auth/register">Create account</a>
+    </p>
+
+  </mat-card>
+</div>

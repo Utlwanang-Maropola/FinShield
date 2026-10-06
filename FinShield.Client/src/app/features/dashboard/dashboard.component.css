@@ -1,0 +1,86 @@
+.page { padding: 28px; max-width: 1200px; margin: 0 auto; }
+.page-header { margin-bottom: 24px; }
+h1 { margin: 0; font-size: 28px; font-weight: 700; }
+h2 { margin: 0 0 16px; font-size: 17px; font-weight: 600; }
+.subtitle { color: #888; margin: 4px 0 0; }
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card { padding: 20px; border-radius: 12px !important; }
+.alert-card { border: 1px solid #ffcdd2; }
+
+.stat-icon { font-size: 32px; height: 32px; width: 32px; margin-bottom: 8px; }
+.income-icon { color: #4caf50; }
+.expense-icon { color: #f44336; }
+.savings-icon { color: #2196f3; }
+.alert-icon { color: #f44336; }
+.safe-icon { color: #4caf50; }
+
+.stat-label { font-size: 13px; color: #888; margin-bottom: 4px; }
+.stat-value { font-size: 26px; font-weight: 700; }
+.stat-sub { font-size: 12px; color: #aaa; margin-top: 2px; }
+
+.income { color: #2e7d32; }
+.expense { color: #c62828; }
+
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.section-card { padding: 20px; border-radius: 12px !important; margin-bottom: 24px; }
+
+.cat-row, .budget-row { margin-bottom: 14px; }
+
+.cat-info, .budget-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.cat-name { flex: 1; font-size: 14px; font-weight: 500; }
+.cat-amount { font-size: 13px; color: #555; }
+.cat-pct { font-size: 11px; color: #999; display: block; text-align: right; margin-top: 2px; }
+
+.over-badge {
+  background: #ffebee;
+  color: #c62828;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin: 0 8px;
+}
+
+.trend-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  padding: 8px 0;
+  border-bottom: 2px solid #eee;
+  font-weight: 600;
+  color: #888;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.trend-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  padding: 10px 0;
+  border-bottom: 1px solid #f5f5f5;
+  font-size: 14px;
+}
+
+.empty { color: #aaa; font-size: 14px; text-align: center; padding: 20px 0; }
+.loading { text-align: center; padding: 60px; color: #aaa; }
+
+@media (max-width: 768px) {
+  .bottom-grid { grid-template-columns: 1fr; }
+}
